@@ -1,0 +1,19 @@
+id = "relay-zed"
+name = "Relay"
+version = "0.0.1"
+schema_version = 1
+authors = ["XiNiHa <me@xiniha.dev>"]
+description = "Relay support for Zed"
+repository = "https://github.com/XiNiHa/relay-zed"
+
+[language_servers.relay]
+name = "Relay Language Server"
+language = "Relay"
+languages = ["JavaScript", "JSX", "TypeScript", "TSX", "GraphQL"]
+
+[language_servers.relay.language_ids]
+"JSX" = "javascriptreact"
+"JavaScript" = "javascript"
+"TSX" = "typescriptreact"
+"TypeScript" = "typescript"
+"GraphQL" = "graphql"
