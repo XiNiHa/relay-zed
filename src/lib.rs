@@ -80,23 +80,39 @@ impl zed::Extension for RelayZed {
         let args = vec![
             env::current_dir()
                 .unwrap()
-                .join(&server_path)
+                .join(server_path)
                 .to_string_lossy()
                 .to_string(),
             "lsp".to_string(),
             format!("--output={}", settings.lsp_output_level),
         ];
 
+        let working_directory = settings
+            .root_directory
+            .unwrap_or_else(|| worktree.root_path());
+
         Ok(zed::Command {
-            command: zed::node_binary_path()?,
-            args,
-            env: Default::default(),
+            command: "/bin/sh".to_string(),
+            args: vec![
+                "-c".to_string(),
+                format!(
+                    r#"cd {}; "{}" {}"#,
+                    working_directory,
+                    zed::node_binary_path()?,
+                    args.into_iter()
+                        .map(|arg| format!(r#""{}""#, arg))
+                        .collect::<Vec<_>>()
+                        .join(" ")
+                ),
+            ],
+            env: Vec::new(),
         })
     }
 }
 
 struct Settings {
     lsp_output_level: String,
+    root_directory: Option<String>,
     path_to_relay: Option<String>,
 }
 
@@ -112,15 +128,16 @@ impl Settings {
                         .map(|v| v.to_string())
                 })
                 .unwrap_or("quiet-with-errors".to_string()),
-            path_to_relay: settings
-                .settings
-                .as_ref()
-                .and_then(|s| {
-                    s.get("pathToBinary")
-                        .and_then(|v| v.as_str())
-                        .map(|v| v.to_string())
-                })
-                .map(|v| v.to_string()),
+            root_directory: settings.settings.as_ref().and_then(|s| {
+                s.get("rootDirectory")
+                    .and_then(|v| v.as_str())
+                    .map(|v| v.to_string())
+            }),
+            path_to_relay: settings.settings.as_ref().and_then(|s| {
+                s.get("pathToBinary")
+                    .and_then(|v| v.as_str())
+                    .map(|v| v.to_string())
+            }),
         }
     }
 }
