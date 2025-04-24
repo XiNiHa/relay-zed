@@ -77,7 +77,7 @@ impl zed::Extension for RelayZed {
         )?);
         let server_path = self.server_script_path(language_server_id, settings.path_to_relay)?;
 
-        let args = vec![
+        let mut args = vec![
             env::current_dir()
                 .unwrap()
                 .join(server_path)
@@ -86,6 +86,10 @@ impl zed::Extension for RelayZed {
             "lsp".to_string(),
             format!("--output={}", settings.lsp_output_level),
         ];
+
+        if let Some(path_to_locate_command) = settings.path_to_locate_command{
+            args.push(format!("--locateCommand={path_to_locate_command}"));
+        }
 
         let working_directory = settings
             .root_directory
@@ -114,6 +118,7 @@ struct Settings {
     lsp_output_level: String,
     root_directory: Option<String>,
     path_to_relay: Option<String>,
+    path_to_locate_command: Option<String>,
 }
 
 impl Settings {
@@ -135,6 +140,11 @@ impl Settings {
             }),
             path_to_relay: settings.settings.as_ref().and_then(|s| {
                 s.get("pathToBinary")
+                    .and_then(|v| v.as_str())
+                    .map(|v| v.to_string())
+            }),
+            path_to_locate_command: settings.settings.as_ref().and_then(|s| {
+                s.get("pathToLocateCommand")
                     .and_then(|v| v.as_str())
                     .map(|v| v.to_string())
             }),
