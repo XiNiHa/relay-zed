@@ -1,6 +1,6 @@
 id = "relay"
 name = "Relay"
-version = "0.0.2"
+version = "0.0.3"
 schema_version = 1
 authors = ["XiNiHa <me@xiniha.dev>"]
 description = "Relay support for Zed"
