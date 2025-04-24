@@ -9,7 +9,7 @@ struct RelayZed;
 
 impl RelayZed {
     fn server_exists(&self) -> bool {
-        fs::metadata(SERVER_PATH).map_or(false, |metadata| metadata.is_file())
+        fs::metadata(SERVER_PATH).is_ok_and(|metadata| metadata.is_file())
     }
 
     fn server_script_path(
@@ -45,8 +45,8 @@ impl RelayZed {
                 Ok(()) => {
                     if !self.server_exists() {
                         Err(format!(
-                                    "installed package '{PACKAGE_NAME}' did not contain expected path '{SERVER_PATH}'",
-                                ))?;
+                            "installed package '{PACKAGE_NAME}' did not contain expected path '{SERVER_PATH}'",
+                        ))?;
                     }
                 }
                 Err(error) => {
