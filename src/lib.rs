@@ -18,7 +18,9 @@ impl RelayZed {
         path_to_relay: Option<String>,
     ) -> zed::Result<String> {
         if let Some(path) = path_to_relay {
-            println!("You've manually specified 'pathToRelay'. We cannot confirm this version of the Relay Compiler is supported by this version of the extension. I hope you know what you're doing.");
+            println!(
+                "You've manually specified 'pathToRelay'. We cannot confirm this version of the Relay Compiler is supported by this version of the extension. I hope you know what you're doing."
+            );
             return Ok(path);
         }
 
@@ -87,7 +89,7 @@ impl zed::Extension for RelayZed {
             format!("--output={}", settings.lsp_output_level),
         ];
 
-        if let Some(path_to_locate_command) = settings.path_to_locate_command{
+        if let Some(path_to_locate_command) = settings.path_to_locate_command {
             args.push(format!("--locateCommand={path_to_locate_command}"));
         }
 
