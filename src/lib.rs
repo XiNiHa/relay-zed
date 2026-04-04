@@ -103,7 +103,7 @@ impl zed::Extension for RelayZed {
                 "-c".to_string(),
                 format!(
                     r#"cd {}; "{}" {}"#,
-                    working_directory,
+                    working_directory.replace("\\", "\\\\"),
                     zed::node_binary_path()?,
                     args.into_iter()
                         .map(|arg| format!(r#""{}""#, arg))
