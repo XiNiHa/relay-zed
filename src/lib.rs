@@ -2,7 +2,7 @@ use std::{env, fs};
 
 use zed_extension_api as zed;
 
-const SERVER_PATH: &str = "node_modules/.bin/relay-compiler";
+const SERVER_PATH: &str = "node_modules/relay-compiler/cli.js";
 const PACKAGE_NAME: &str = "relay-compiler";
 
 struct RelayZed;
